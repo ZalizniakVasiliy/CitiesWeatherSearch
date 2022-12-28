@@ -10,13 +10,148 @@ import { useNavigate } from "react-router-dom";
 import Divider from "@mui/material/Divider";
 import cityDataStorage from "../utils/CityDataStorage";
 import { PropsCity } from "../components/CitiesList";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+import { threeHourlyTemperature } from "../assets/threeHourlyTemperature";
+import { WeatherProps } from "../assets/WeatherProps";
 
-type WeatherProps = {
-  description: string;
-};
+// type WeatherProps = {
+//   description: string;
+// };
+//
+// type threeHourlyTemperature = {
+//   dt: number,
+//   main: {
+//     feels_like: number;
+//     grnd_level: number;
+//     humidity: number;
+//     pressure: number;
+//     sea_level: number;
+//     temp: number;
+//     temp_kf: number;
+//     temp_max: number;
+//     temp_min: number;
+//   }
+// };
+//
+// export type threeHourlyTemperatureAllData = {
+//   city: {
+//     coord: {
+//       lat: number;
+//       lon: number;
+//     };
+//     id: number;
+//     name: string;
+//     population: number;
+//     sunrise: number;
+//     sunset: number;
+//     timezone: number;
+//   };
+//   cnt: number;
+//   cod: string;
+//
+//   clouds: {
+//     all: number;
+//   },
+//   dt: number,
+//   dt_txt: string,
+//   main: {
+//     feels_like: number;
+//     grnd_level: number;
+//     humidity: number;
+//     pressure: number;
+//     sea_level: number;
+//     temp: number;
+//     temp_kf: number;
+//     temp_max: number;
+//     temp_min: number;
+//   }
+//   pop: number,
+//   sys: {
+//     pod: string;
+//   },
+//   visibility: number,
+//   weather: [{
+//     description: string;
+//     icon: string;
+//     id: number;
+//     main: string;
+//   }],
+//   wind: {
+//     deg: number;
+//     gust: number;
+//     speed: number;
+//   },
+// }
 
 const CityWeatherDetails = () => {
   const currentCityData = cityDataStorage.getCitiesDetailsData();
+
+  const secondsToTime = (duration: number): string => {
+    let hour: number | string = parseInt(String((duration / (60 * 60)) % 24));
+    let min: number | string = parseInt(String((duration / 60) % 60));
+
+    hour = hour < 10 ? "0" + (hour.toFixed(0)) : hour.toFixed(0);
+    min = min < 10 ? "0" + min.toFixed(0) : min.toFixed(0);
+    return `${hour}:${min}`;
+  };
+
+  const temperatureThreeHourlyList = cityDataStorage.getCityWeatherListData();
+
+  const getTemperatureList = () => {
+    return temperatureThreeHourlyList.list.slice(0, 8).map((item: threeHourlyTemperature) => {
+      return item.main.temp;
+    });
+  };
+
+  const getTemperatureTimeList = () => {
+    return temperatureThreeHourlyList.list.slice(0, 8).map((item: threeHourlyTemperature) => {
+      return secondsToTime(item.dt);
+    });
+  };
+
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const
+      },
+      title: {
+        display: true,
+        text: `Three hourly temperature chart of the ${currentCityData.name}`
+      }
+    }
+  };
+
+  const labels = getTemperatureTimeList();
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Temperature",
+        data: getTemperatureList().map((item: number) => item),
+        backgroundColor: "lightgreen"
+      }
+    ]
+  };
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -28,205 +163,199 @@ const CityWeatherDetails = () => {
     navigate(-1);
   };
 
-  const secondsToTime = (duration: number): string => {
-    let hour: number | string = parseInt(String((duration / (60 * 60)) % 24));
-    let min: number | string = parseInt(String((duration / 60) % 60));
-
-    hour = hour < 10 ? "0" + (hour.toFixed(0)) : hour.toFixed(0);
-    min = min < 10 ? "0" + min.toFixed(0) : min.toFixed(0);
-    return `${hour}:${min}`;
-  };
-
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh"
-      }}
-    >
-      <Card sx={{ mb: 1, width: "100%" }}>
-        <CardContent>
-          <Typography
-            gutterBottom
-            variant="h3"
-            component="div"
-            sx={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <div>{currentCityData.name}</div>
-            <div>{currentCityData.sys.country}</div>
-          </Typography>
-          <Divider />
-          <Typography
-            color="text.secondary"
-            sx={{
-              mt: "20px",
-              color: "#88F4E2 ",
-              fontSize: "20px",
-              textAlign: "center"
-            }}
-          >
-            <div>
-              {currentCityData.weather
-                .map((w: WeatherProps) => w.description.toUpperCase())}
-            </div>
-          </Typography>
-          <Typography
-            variant="h5"
-            color="text.secondary"
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              mt: "20px",
-              color: "lightgreen"
-            }}
-          >
-            <div>Temperature</div>
-            <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
-              {currentCityData.main.temp} &deg;C
-            </div>
-          </Typography>
-          <Divider />
-          <Typography
-            variant="h5"
-            color="text.secondary"
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              mt: "5px",
-              color: "lightgreen"
-            }}
-          >
-            <div>Feels like</div>
-            <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
-              {currentCityData.main.feels_like}{" "}&deg;C
-            </div>
-          </Typography>
-          <Divider />
-          <Typography
-            variant="h5"
-            color="text.secondary"
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              mt: "5px",
-              color: "lightgreen"
-            }}
-          >
-            <div>Pressure</div>
-            <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
-              {currentCityData.main.pressure} hPa
-            </div>
-          </Typography>
-          <Divider />
-          <Typography
-            variant="h5"
-            color="text.secondary"
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              mt: "5px",
-              color: "lightgreen"
-            }}
-          >
-            <div>Humidity</div>
-            <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
-              {currentCityData.main.humidity} %
-            </div>
-          </Typography>
-          <Divider />
-          <Typography
-            variant="h5"
-            color="text.secondary"
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              mt: "5px",
-              color: "lightgreen"
-            }}
-          >
-            <div>Wind</div>
-            <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
-              {currentCityData.wind.speed} m/s
-            </div>
-          </Typography>
-          <Divider />
-          <Typography
-            variant="h5"
-            color="text.secondary"
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              mt: "5px",
-              color: "lightgreen"
-            }}
-          >
-            <div>Visibility</div>
-            <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
-              {(Number(currentCityData.visibility) / 1000)
-                .toFixed(1)}km
-            </div>
-          </Typography>
-          <Divider />
-          <Typography
-            variant="h5"
-            color="text.secondary"
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              mt: "30px",
-              color: "lightgreen",
-              fontSize: "24px"
-            }}
-          >
-            <div>Sunrise:</div>
-            <div style={{ color: "#EAF724" }}>
-              {secondsToTime(Number(currentCityData.sys.sunrise)
-                + Number(currentCityData.timezone))}
-            </div>
-          </Typography>
-          <Divider />
-          <Typography
-            variant="h5"
-            color="text.secondary"
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              mt: "5px",
-              color: "lightgreen",
-              fontSize: "24px"
-            }}
-          >
-            <div>Sunset:</div>
-            <div style={{ color: "#EB9355" }}>
-              {secondsToTime(Number(currentCityData.sys.sunset)
-                + Number(currentCityData.timezone))}
-            </div>
-          </Typography>
-          <Divider />
-        </CardContent>
-        <CardActions>
-          <Button
-            size="small"
-            color="warning"
-            variant="contained"
-            sx={{ p: "5px", m: "0 0 8px 8px" }}
-            onClick={goBack}
-          >
-            Go Back
-          </Button>
-        </CardActions>
-      </Card>
+    <Container sx={{
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center"
+    }}>
+      <Container maxWidth="sm">
+        <Card sx={{ mb: 1, width: "100%" }}>
+          <CardContent>
+            <Typography
+              gutterBottom
+              variant="h3"
+              component="div"
+              sx={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <div>{currentCityData.name}</div>
+              <div>{currentCityData.sys.country}</div>
+            </Typography>
+            <Divider />
+            <Typography
+              color="text.secondary"
+              sx={{
+                mt: "20px",
+                color: "#88F4E2 ",
+                fontSize: "20px",
+                textAlign: "center"
+              }}
+            >
+              <div>
+                {currentCityData.weather
+                  .map((w: WeatherProps) => w.description.toUpperCase())}
+              </div>
+            </Typography>
+            <Typography
+              variant="h5"
+              color="text.secondary"
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                mt: "20px",
+                color: "lightgreen"
+              }}
+            >
+              <div>Temperature</div>
+              <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
+                {currentCityData.main.temp} &deg;C
+              </div>
+            </Typography>
+            <Divider />
+            <Typography
+              variant="h5"
+              color="text.secondary"
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                mt: "5px",
+                color: "lightgreen"
+              }}
+            >
+              <div>Feels like</div>
+              <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
+                {currentCityData.main.feels_like}{" "}&deg;C
+              </div>
+            </Typography>
+            <Divider />
+            <Typography
+              variant="h5"
+              color="text.secondary"
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                mt: "5px",
+                color: "lightgreen"
+              }}
+            >
+              <div>Pressure</div>
+              <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
+                {currentCityData.main.pressure} hPa
+              </div>
+            </Typography>
+            <Divider />
+            <Typography
+              variant="h5"
+              color="text.secondary"
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                mt: "5px",
+                color: "lightgreen"
+              }}
+            >
+              <div>Humidity</div>
+              <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
+                {currentCityData.main.humidity} %
+              </div>
+            </Typography>
+            <Divider />
+            <Typography
+              variant="h5"
+              color="text.secondary"
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                mt: "5px",
+                color: "lightgreen"
+              }}
+            >
+              <div>Wind</div>
+              <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
+                {currentCityData.wind.speed} m/s
+              </div>
+            </Typography>
+            <Divider />
+            <Typography
+              variant="h5"
+              color="text.secondary"
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                mt: "5px",
+                color: "lightgreen"
+              }}
+            >
+              <div>Visibility</div>
+              <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
+                {(Number(currentCityData.visibility) / 1000)
+                  .toFixed(1)} km
+              </div>
+            </Typography>
+            <Divider />
+            <Typography
+              variant="h5"
+              color="text.secondary"
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                mt: "30px",
+                color: "lightgreen",
+                fontSize: "24px"
+              }}
+            >
+              <div>Sunrise:</div>
+              <div style={{ color: "#EAF724" }}>
+                {secondsToTime(Number(currentCityData.sys.sunrise)
+                  + Number(currentCityData.timezone))}
+              </div>
+            </Typography>
+            <Divider />
+            <Typography
+              variant="h5"
+              color="text.secondary"
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                mt: "5px",
+                color: "lightgreen",
+                fontSize: "24px"
+              }}
+            >
+              <div>Sunset:</div>
+              <div style={{ color: "#EB9355" }}>
+                {secondsToTime(Number(currentCityData.sys.sunset)
+                  + Number(currentCityData.timezone))}
+              </div>
+            </Typography>
+            <Divider />
+          </CardContent>
+          <CardActions>
+            <Button
+              size="small"
+              color="warning"
+              variant="contained"
+              sx={{ p: "5px", m: "0 0 8px 8px" }}
+              onClick={goBack}
+            >
+              Go Back
+            </Button>
+          </CardActions>
+        </Card>
+      </Container>
+      <Container maxWidth="sm">
+        <Bar data={data} options={options} />
+      </Container>
     </Container>
   );
 };

@@ -19,11 +19,17 @@ export const weatherApi = createApi({
     getSpecifiedCityWeather: build.query({
       query: (coordinatesCity) =>
         `data/2.5/weather?lat=${coordinatesCity.lat}&lon=${coordinatesCity.lon}&units=metric&appid=${API_KEY}`
+    }),
+
+    getSpecifiedCityHourlyWeather: build.query({
+      query: (coordinatesCity) =>
+        `data/2.5/forecast?lat=${coordinatesCity.lat}&lon=${coordinatesCity.lon}&appid=${API_KEY}&units=metric`
     })
   })
 });
 
 export const {
   useLazyGetCityListDataQuery,
-  useGetSpecifiedCityWeatherQuery
+  useGetSpecifiedCityWeatherQuery,
+  useGetSpecifiedCityHourlyWeatherQuery
 } = weatherApi;

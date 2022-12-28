@@ -22,7 +22,7 @@ const CitiesList = ({ cities = [], setCitiesList }: Props) => {
   const handleRemoveCityCard = (indexCity: number) => {
     const cities = cityDataStorage.getCitiesData();
     const newCitiesList = cities
-      .filter((city: object, index: number) => index !== indexCity);
+      .filter((city: PropsCity, index: number) => index !== indexCity);
     cityDataStorage.setCitiesData(newCitiesList);
     setCitiesList(newCitiesList);
   };

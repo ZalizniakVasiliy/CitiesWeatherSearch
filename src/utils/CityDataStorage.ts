@@ -1,8 +1,10 @@
 import { PropsCity } from "../components/CitiesList";
+import { threeHourlyTemperatureAllData } from "../assets/threeHourlyTemperatureAllData";
 
 class CityDataStorage {
   dataCitiesDBName: string | null = "cities";
   dataCityDetailsDBName: string | null = "citiesDetails";
+  dataCityWeatherListDBName: string | null = "citiesWeatherList";
 
   getCitiesData() {
     const value = localStorage.getItem(this.dataCitiesDBName as string);
@@ -33,6 +35,24 @@ class CityDataStorage {
     if (typeof this.dataCityDetailsDBName === "string") {
       localStorage.setItem(
         this.dataCityDetailsDBName,
+        JSON.stringify(localCityDetailData)
+      );
+    }
+
+    return localCityDetailData;
+  }
+
+  getCityWeatherListData() {
+    const value = localStorage.getItem(this.dataCityWeatherListDBName as string);
+    return typeof value === "string" ? JSON.parse(value) : {};
+  }
+
+  setCityWeatherListData(cityWeatherList: threeHourlyTemperatureAllData) {
+    const localCityDetailData = { ...cityWeatherList };
+
+    if (typeof this.dataCityWeatherListDBName === "string") {
+      localStorage.setItem(
+        this.dataCityWeatherListDBName,
         JSON.stringify(localCityDetailData)
       );
     }

@@ -1,13 +1,13 @@
-import * as React from 'react';
-import {Routes, Route} from "react-router-dom";
+import * as React from "react";
+import { Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
-import {ThemeProvider, createTheme} from "@mui/material/styles";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CityWeatherDetails from "./pages/CityWeatherDetails";
 
 const darkTheme = createTheme({
   palette: {
-    mode: "dark",
-  },
+    mode: "dark"
+  }
 });
 
 const App = () => {
@@ -15,8 +15,8 @@ const App = () => {
     <div className="App">
       <ThemeProvider theme={darkTheme}>
         <Routes>
-          <Route path="/" element={<MainPage/>}/>
-          <Route path="selectedCity/:id" element={<CityWeatherDetails/>}/>
+          <Route path="/" element={<MainPage />} />
+          <Route path="selectedCity/:id" element={<CityWeatherDetails />} />
         </Routes>
       </ThemeProvider>
     </div>
