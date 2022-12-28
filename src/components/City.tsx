@@ -6,7 +6,8 @@ import ListItem from "@mui/material/ListItem";
 import Typography from "@mui/material/Typography";
 import UpdateIcon from "@mui/icons-material/Update";
 import Divider from "@mui/material/Divider";
-import { useGetSpecifiedCityHourlyWeatherQuery, useGetSpecifiedCityWeatherQuery } from "../store/citiesWeatherApi";
+import { useGetSpecifiedCityHourlyWeatherQuery, useGetSpecifiedCityWeatherQuery }
+  from "../store/citiesWeatherApi";
 import ProgressLoader from "../assets/ProgressLoader";
 import { useNavigate } from "react-router-dom";
 import RoutesToPages from "../utils/RoutesToPages";
@@ -42,9 +43,7 @@ const City = ({ city, index, handleRemoveCityCard }: Props) => {
 
   const showWeatherDetails = (id: number) => {
     cityDataStorage.setCityDetailData({ ...cityData });
-
     cityDataStorage.setCityWeatherListData({ ...cityWeatherThreeHourly });
-
     navigate(RoutesToPages.selectedCity + id);
   };
 
