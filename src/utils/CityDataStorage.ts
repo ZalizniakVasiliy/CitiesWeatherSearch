@@ -64,6 +64,9 @@ class CityDataStorage {
     if (typeof this.dataCityDetailsDBName === "string") {
       localStorage.removeItem(this.dataCityDetailsDBName);
     }
+    if (typeof this.dataCityWeatherListDBName === "string") {
+      localStorage.removeItem(this.dataCityWeatherListDBName);
+    }
   }
 }
 
