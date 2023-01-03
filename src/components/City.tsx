@@ -80,11 +80,12 @@ const City = ({ city, index, handleRemoveCityCard }: Props) => {
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
-                  alignItems: "baseline"
+                  alignItems: "baseline",
+                  gap: "15px"
                 }}
               >
                 <div>{cityData.main.temp} &deg;C</div>
-                <div style={{ fontSize: "24px" }}>
+                <div style={{ fontSize: "24px", textAlign: "right" }}>
                   {cityData.weather.map((w: WeatherProps) => (
                     <div key={w.id}>{w.description}</div>
                   ))}
