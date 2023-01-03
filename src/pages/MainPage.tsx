@@ -24,6 +24,7 @@ const MainPage = () => {
   };
 
   const handleSearch = () => {
+    if (!currentSearchValue.current) return;
     searchCities(currentSearchValue.current);
   };
 
