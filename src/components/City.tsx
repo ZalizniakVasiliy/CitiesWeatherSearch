@@ -50,7 +50,7 @@ const City = ({ city, index, handleRemoveCityCard }: Props) => {
   return (
     isLoading ? <ProgressLoader /> :
       (
-        <ListItem key={city.id} sx={{ p: 0, listStyle: "none" }}>
+        <ListItem sx={{ p: 0, listStyle: "none" }}>
           <Card sx={{ mb: 1, width: "100%" }}>
             <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
               <Button
@@ -91,7 +91,6 @@ const City = ({ city, index, handleRemoveCityCard }: Props) => {
                   ))}
                 </div>
               </Typography>
-
               <Divider />
             </CardContent>
             <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>

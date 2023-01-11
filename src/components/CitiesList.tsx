@@ -9,7 +9,6 @@ export type PropsCity = {
   state: string;
   lat: number;
   lon: number;
-  id: number;
 }
 
 type Props = {
@@ -17,7 +16,7 @@ type Props = {
   setCitiesList: (city: PropsCity[]) => void;
 }
 
-const CitiesList = ({ cities = [], setCitiesList }: Props) => {
+const CitiesList = ({ cities, setCitiesList }: Props) => {
 
   const handleRemoveCityCard = (indexCity: number) => {
     const cities = cityDataStorage.getCitiesData();

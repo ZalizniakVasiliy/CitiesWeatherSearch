@@ -16,9 +16,9 @@ export type threeHourlyTemperatureAllData = {
 
   clouds: {
     all: number;
-  },
-  dt: number,
-  dt_txt: string,
+  };
+  dt: number;
+  dt_txt: string;
   main: {
     feels_like: number;
     grnd_level: number;
@@ -29,23 +29,23 @@ export type threeHourlyTemperatureAllData = {
     temp_kf: number;
     temp_max: number;
     temp_min: number;
-  }
-  pop: number,
+  };
+  pop: number;
   sys: {
     pod: string;
-  },
-  visibility: number,
+  };
+  visibility: number;
   weather: [{
     description: string;
     icon: string;
     id: number;
     main: string;
-  }],
+  }];
   wind: {
     deg: number;
     gust: number;
     speed: number;
-  },
+  };
 }
 
 

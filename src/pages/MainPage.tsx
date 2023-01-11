@@ -12,7 +12,6 @@ import SearchLocations from "../components/SearchLocations";
 import CitiesList, { PropsCity } from "../components/CitiesList";
 import cityDataStorage from "../utils/CityDataStorage";
 
-
 const MainPage = () => {
   const currentSearchValue = useRef<string>();
 
@@ -29,6 +28,7 @@ const MainPage = () => {
   };
 
   const handleSpecifiedCity = (city: PropsCity) => {
+    currentSearchValue.current = "";
     const newCities = [city, ...userCities];
     cityDataStorage.setCitiesData(newCities);
     setUserCities(newCities);
@@ -57,7 +57,7 @@ const MainPage = () => {
             />
             <IconButton
               type="button"
-              sx={{ p: "10px 16px" }}
+              sx={{ p: "8px", m: "4px 4px 4px 0" }}
               aria-label="search"
               onClick={handleSearch}
             >
@@ -70,10 +70,11 @@ const MainPage = () => {
           maxWidth="sm"
           sx={{ display: "flex", flexDirection: "column" }}
         >
-          <SearchLocations
-            onHandleSpecifiedCity={handleSpecifiedCity}
-            citiesList={searchList || []}
-          />
+          {currentSearchValue.current &&
+            <SearchLocations
+              onHandleSpecifiedCity={handleSpecifiedCity}
+              citiesList={searchList || []}
+            />}
         </Container>
       </Container>)
   );

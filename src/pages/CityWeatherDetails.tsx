@@ -111,8 +111,8 @@ const CityWeatherDetails = () => {
               component="div"
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
-              <div>{currentCityData.name}</div>
-              <div>{currentCityData.sys.country}</div>
+              <span>{currentCityData.name}</span>
+              <span>{currentCityData.sys.country}</span>
             </Typography>
             <Divider />
             <Typography
@@ -124,10 +124,10 @@ const CityWeatherDetails = () => {
                 textAlign: "center"
               }}
             >
-              <div>
+              <span>
                 {currentCityData.weather
                   .map((w: WeatherProps) => w.description.toUpperCase())}
-              </div>
+              </span>
             </Typography>
             <Typography
               variant="h5"
@@ -140,10 +140,10 @@ const CityWeatherDetails = () => {
                 color: "lightgreen"
               }}
             >
-              <div>Temperature</div>
-              <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
+              <span>Temperature</span>
+              <span style={{ fontSize: "24px", color: "#88F4E2 " }}>
                 {currentCityData.main.temp} &deg;C
-              </div>
+              </span>
             </Typography>
             <Divider />
             <Typography
@@ -157,10 +157,10 @@ const CityWeatherDetails = () => {
                 color: "lightgreen"
               }}
             >
-              <div>Feels like</div>
-              <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
+              <span>Feels like</span>
+              <span style={{ fontSize: "24px", color: "#88F4E2 " }}>
                 {currentCityData.main.feels_like}{" "}&deg;C
-              </div>
+              </span>
             </Typography>
             <Divider />
             <Typography
@@ -174,10 +174,10 @@ const CityWeatherDetails = () => {
                 color: "lightgreen"
               }}
             >
-              <div>Pressure</div>
-              <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
+              <span>Pressure</span>
+              <span style={{ fontSize: "24px", color: "#88F4E2 " }}>
                 {currentCityData.main.pressure} hPa
-              </div>
+              </span>
             </Typography>
             <Divider />
             <Typography
@@ -191,10 +191,10 @@ const CityWeatherDetails = () => {
                 color: "lightgreen"
               }}
             >
-              <div>Humidity</div>
-              <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
+              <span>Humidity</span>
+              <span style={{ fontSize: "24px", color: "#88F4E2 " }}>
                 {currentCityData.main.humidity} %
-              </div>
+              </span>
             </Typography>
             <Divider />
             <Typography
@@ -208,10 +208,10 @@ const CityWeatherDetails = () => {
                 color: "lightgreen"
               }}
             >
-              <div>Wind</div>
-              <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
+              <span>Wind</span>
+              <span style={{ fontSize: "24px", color: "#88F4E2 " }}>
                 {currentCityData.wind.speed} m/s
-              </div>
+              </span>
             </Typography>
             <Divider />
             <Typography
@@ -225,11 +225,11 @@ const CityWeatherDetails = () => {
                 color: "lightgreen"
               }}
             >
-              <div>Visibility</div>
-              <div style={{ fontSize: "24px", color: "#88F4E2 " }}>
+              <span>Visibility</span>
+              <span style={{ fontSize: "24px", color: "#88F4E2 " }}>
                 {(Number(currentCityData.visibility) / 1000)
                   .toFixed(1)} km
-              </div>
+              </span>
             </Typography>
             <Divider />
             <Typography
@@ -244,11 +244,11 @@ const CityWeatherDetails = () => {
                 fontSize: "24px"
               }}
             >
-              <div>Sunrise:</div>
-              <div style={{ color: "#EAF724" }}>
+              <span>Sunrise:</span>
+              <span style={{ color: "#EAF724" }}>
                 {secondsToTime(Number(currentCityData.sys.sunrise)
                   + Number(currentCityData.timezone))}
-              </div>
+              </span>
             </Typography>
             <Divider />
             <Typography
@@ -263,11 +263,11 @@ const CityWeatherDetails = () => {
                 fontSize: "24px"
               }}
             >
-              <div>Sunset:</div>
-              <div style={{ color: "#EB9355" }}>
+              <span>Sunset:</span>
+              <span style={{ color: "#EB9355" }}>
                 {secondsToTime(Number(currentCityData.sys.sunset)
                   + Number(currentCityData.timezone))}
-              </div>
+              </span>
             </Typography>
             <Divider />
           </CardContent>
