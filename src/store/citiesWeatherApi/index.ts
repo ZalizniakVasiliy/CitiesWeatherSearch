@@ -13,7 +13,6 @@ export const weatherApi = createApi({
     getCityListData: build.query({
       query: (cityName) =>
         `geo/1.0/direct?q=${cityName}&limit=100&appid=${API_KEY}`
-
     }),
 
     getSpecifiedCityWeather: build.query({

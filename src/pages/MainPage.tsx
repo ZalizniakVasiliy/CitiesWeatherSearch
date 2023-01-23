@@ -27,6 +27,13 @@ const MainPage = () => {
     searchCities(currentSearchValue.current);
   };
 
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (event.key === "Enter") {
+      currentSearchValue.current = (event.target as HTMLInputElement).value;
+      handleSearch()
+    }
+  };
+
   const handleSpecifiedCity = (city: PropsCity) => {
     currentSearchValue.current = "";
     const newCities = [city, ...userCities];
@@ -43,6 +50,7 @@ const MainPage = () => {
         >
           <Paper
             component="form"
+            onSubmit={(event) => event.preventDefault()}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -54,6 +62,7 @@ const MainPage = () => {
               placeholder="Search city"
               defaultValue={currentSearchValue.current}
               onChange={handleInput}
+              onKeyUp={handleKeyUp}
             />
             <IconButton
               type="button"
